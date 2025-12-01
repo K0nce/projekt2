@@ -6,15 +6,38 @@ $(document).ready(function() {
     showPage('home');
 });
 
+// Helpers for image normalization and placeholders
+function placeholderSVG(text) {
+    const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="500" height="300"><rect fill="#ddd" width="500" height="300"/><text x="250" y="150" font-size="20" text-anchor="middle" fill="#333" dy=".3em">${text}</text></svg>`;
+    return 'data:image/svg+xml,' + encodeURIComponent(svg);
+}
+
+function normalizeImage(img) {
+    if (!img) return placeholderSVG('Brak zdjęcia');
+    // already data URI
+    if (/^data:image\//.test(img)) return img;
+    // absolute or protocol-relative URL
+    if (/^(https?:)?\/\//.test(img)) return img;
+    // simple filename or relative path (no stray quotes)
+    const cleaned = img.split(/['"\s]/)[0];
+    if (/\.(jpe?g|png|webp|svg)$/i.test(cleaned)) return cleaned;
+    // if contains encoded svg fragment
+    const idx = img.indexOf('%3Csvg');
+    if (idx !== -1) return 'data:image/svg+xml,' + img.slice(idx);
+    return placeholderSVG('Zdjęcie');
+}
+
 function loadListings() {
     const saved = localStorage.getItem('listings');
     listings = saved ? JSON.parse(saved) : [
-        { id: 1, brand: 'BMW', model: 'X5', year: 2022, price: 185000, mileage: 25000, fuel: 'Diesel', description: 'Piękny BMW X5 w doskonałym stanie. Zadbany, serwis regularny, wszystkie wyposażenie opcyjne. Bezwypadkowy.', contact: '+48 555 123 456', image:'bmw.jpg" width="500" height="300"%3E%3Crect fill="%236B4423" width="500" height="300"/%3E%3Ctext x="250" y="150" font-size="20" fill="white" text-anchor="middle" dy=".3em"%3EBMW X5 2022%3C/text%3E%3C/svg%3E' },
-        { id: 2, brand: 'Audi', model: 'A4', year: 2023, price: 125000, mileage: 15000, fuel: 'Benzyna', description: 'Audi A4 nowy model. Salon polska, gwarancja producenta, wszystkie sprzęty elektroniczne.', contact: '+48 555 234 567', image:'audi.webp" width="500" height="300"%3E%3Crect fill="%232C3E50" width="500" height="300"/%3E%3Ctext x="250" y="150" font-size="20" fill="white" text-anchor="middle" dy=".3em"%3EAudi A4 2023%3C/text%3E%3C/svg%3E' },
-        { id: 3, brand: 'Mercedes-Benz', model: 'C-Klasa', year: 2021, price: 145000, mileage: 45000, fuel: 'Diesel', description: 'Mercedes C-Klasa, luksusowy sedan. Serwis w AS, clima, skóra, alarmator.', contact: '+48 555 345 678', image: 'mercedes.webp" width="500" height="300"%3E%3Crect fill="%23C0A080" width="500" height="300"/%3E%3Ctext x="250" y="150" font-size="20" fill="white" text-anchor="middle" dy=".3em"%3EMercedes C 2021%3C/text%3E%3C/svg%3E' },
-        { id: 4, brand: 'Volkswagen', model: 'Golf', year: 2020, price: 75000, mileage: 85000, fuel: 'Benzyna', description: 'VW Golf - niezawodne auto do codziennego użytku. Stan techniczny dobry, opony letnie i zimowe.', contact: '+48 555 456 789', image: 'golf.jpg" width="500" height="300"%3E%3Crect fill="%23DC143C" width="500" height="300"/%3E%3Ctext x="250" y="150" font-size="20" fill="white" text-anchor="middle" dy=".3em"%3EVW Golf 2020%3C/text%3E%3C/svg%3E' },
-        { id: 5, brand: 'Toyota', model: 'Corolla', year: 2019, price: 65000, mileage: 120000, fuel: 'Hybrid', description: 'Toyota Corolla - niezawodne auto japońskie. Oszczędne paliwo, serwis regularny, bez wypadków.', contact: '+48 555 567 890', image: 'toyota.webp" width="500" height="300"%3E%3Crect fill="%235DADE2" width="500" height="300"/%3E%3Ctext x="250" y="150" font-size="20" fill="white" text-anchor="middle" dy=".3em"%3EToyota Corolla 2019%3C/text%3E%3C/svg%3E' }
+        { id: 1, brand: 'BMW', model: 'X5', year: 2022, price: 185000, mileage: 25000, fuel: 'Diesel', description: 'Piękny BMW X5 w doskonałym stanie. Zadbany, serwis regularny, wszystkie wyposażenie opcyjne. Bezwypadkowy.', contact: '+48 555 123 456', image: 'bmw.jpg' },
+        { id: 2, brand: 'Audi', model: 'A4', year: 2023, price: 125000, mileage: 15000, fuel: 'Benzyna', description: 'Audi A4 nowy model. Salon polska, gwarancja producenta, wszystkie sprzęty elektroniczne.', contact: '+48 555 234 567', image: 'audi.webp' },
+        { id: 3, brand: 'Mercedes-Benz', model: 'C-Klasa', year: 2021, price: 145000, mileage: 45000, fuel: 'Diesel', description: 'Mercedes C-Klasa, luksusowy sedan. Serwis w AS, clima, skóra, alarmator.', contact: '+48 555 345 678', image: 'mercedes.webp' },
+        { id: 4, brand: 'Volkswagen', model: 'Golf', year: 2020, price: 75000, mileage: 85000, fuel: 'Benzyna', description: 'VW Golf - niezawodne auto do codziennego użytku. Stan techniczny dobry, opony letnie i zimowe.', contact: '+48 555 456 789', image: 'golf.jpg' },
+        { id: 5, brand: 'Toyota', model: 'Corolla', year: 2019, price: 65000, mileage: 120000, fuel: 'Hybrid', description: 'Toyota Corolla - niezawodne auto japońskie. Oszczędne paliwo, serwis regularny, bez wypadków.', contact: '+48 555 567 890', image: 'toyota.webp' }
     ];
+    // normalize image fields to existing files or data-URI placeholders
+    listings = listings.map(l => ({ ...l, image: normalizeImage(l.image) }));
     displayHomeListings();
 }
 
