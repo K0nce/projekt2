@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CarMarket - Portal Ogłoszeniowy Samochodów</title>
+    <link rel="stylesheet" href="css/style.css">
+      <link rel="icon" type="image/x-icon" href="https://statics.otomoto.pl/optimus-storage/a/otomotopl/images/fb-image200x200.png">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="logo">
+                <img src="https://statics.otomoto.pl/optimus-storage/a/otomotopl/images/fb-image200x200.png" alt="CarMarket Logo" class="logo-icon">
+                <div class="logo-text">
+                    <h1>CarMarket</h1>
+                    <p>Portal Ogłoszeniowy Samochodów</p>
+                </div>
+            </div>
+            <nav class="navbar">
+                <a href="#" class="nav-link active" data-page="home">Strona Główna</a>
+                <a href="#" class="nav-link" data-page="listings">Ogłoszenia</a>
+                <a href="#" class="nav-link" data-page="add">Dodaj Ogłoszenie</a>
+                <a href="#" class="nav-link" data-page="about">O Portalu</a>
+            </nav>
+        </div>
+    </header>
+    <section id="search-section" class="search-section">
+        <div class="container">
+            <h2>Wyszukaj Samochód</h2>
+            <form class="search-form">
+                <div class="form-group">
+                    <input type="text" id="search-brand" placeholder="Marka (np. BMW, Audi)..." class="form-control">
+                </div>
+                <div class="form-group">
+                    <input type="text" id="search-model" placeholder="Model (np. X5, A4)..." class="form-control">
+                </div>
+                <div class="form-group">
+                    <input type="number" id="search-year" placeholder="Rok Produkcji (np. 2022)..." class="form-control" min="1990" max="2025">
+                </div>
+                <div class="form-group">
+                    <input type="number" id="search-price-max" placeholder="Maks. cena (zł)" class="form-control">
+                </div>
+                <button type="button" id="search-btn" class="btn btn-primary">Szukaj</button>
+                <button type="button" id="reset-btn" class="btn btn-secondary">Resetuj</button>
+            </form>
+        </div>
+    </section>
+    <main class="main-content">
+        <div class="container">
+            <section id="home-page" class="page-content active">
+                <div class="welcome-section">
+                    <h2>Witaj w CarMarket!</h2>
+                    <p>Portal ogłoszeniowy samochodów - znajdź idealny samochód dla siebie.</p>
+                </div>
+                <h3>Ostatnio Dodane Ogłoszenia</h3>
+                <div id="home-listings" class="listings-grid"></div>
+            </section>
+            <section id="listings-page" class="page-content">
+                <h2>Wszystkie Ogłoszenia</h2>
+                <div id="listings-container" class="listings-grid"></div>
+            </section>
+            <section id="add-page" class="page-content">
+                <h2>Dodaj Nowe Ogłoszenie</h2>
+                <form id="add-listing-form" class="add-form">
+                    <div class="form-group">
+                        <label for="car-brand">Marka Samochodu:</label>
+                        <input type="text" id="car-brand" placeholder="np. BMW" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="car-model">Model:</label>
+                        <input type="text" id="car-model" placeholder="np. X5" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="car-year">Rok Produkcji:</label>
+                        <input type="number" id="car-year" placeholder="2024" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="car-price">Cena (zł):</label>
+                        <input type="number" id="car-price" placeholder="0" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="car-mileage">Przebieg (km):</label>
+                        <input type="number" id="car-mileage" placeholder="0" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="car-fuel">Paliwo:</label>
+                        <select id="car-fuel" required>
+                            <option value="">Wybierz paliwo</option>
+                            <option value="Benzyna">Benzyna</option>
+                            <option value="Diesel">Diesel</option>
+                            <option value="Hybrid">Hybrid</option>
+                            <option value="Elektryczny">Elektryczny</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="car-image">URL Zdjęcia:</label>
+                        <input type="url" id="car-image" placeholder="https://example.com/image.jpg" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="car-description">Opis:</label>
+                        <textarea id="car-description" placeholder="Opisz stan samochodu..." rows="5"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="car-contact">Telefon Kontaktowy:</label>
+                        <input type="tel" id="car-contact" placeholder="+48 123 456 789" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Dodaj Ogłoszenie</button>
+                </form>
+            </section>
+            <section id="about-page" class="page-content">
+                <h2>O CarMarket</h2>
+                <div class="about-content">
+                    <p>CarMarket to portal ogłoszeniowy dedykowany sprzedaży i kupnie samochodów.</p>
+                    <h3>Funkcjonalności:</h3>
+                    <ul>
+                        <li>✓ Dodawanie ogłoszeń</li>
+                        <li>✓ Wyszukiwanie samochodów</li>
+                        <li>✓ Filtrowanie po parametrach</li>
+                        <li>✓ Kontakt ze sprzedawcą</li>
+                        <li>✓ Responsywny design</li>
+                    </ul>
+                </div>
+            </section>
+        </div>
+    </main>
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2025 CarMarket - Portal Ogłoszeniowy Samochodów. Wszystkie prawa zastrzeżone.</p>
+            <p>Zbudowano z HTML5, CSS3 i jQuery</p>
+        </div>
+    </footer>
+    <div id="listing-modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <div id="modal-body"></div>
+        </div>
+    </div>
+
+    <script src="js/script.js"></script>
+</body>
+</html>
