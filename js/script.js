@@ -6,27 +6,6 @@ $(document).ready(function() {
     showPage('home');
 });
 
-// Helpers for image normalization and placeholders
-function placeholderSVG(text) {
-    const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="500" height="300"><rect fill="#ddd" width="500" height="300"/><text x="250" y="150" font-size="20" text-anchor="middle" fill="#333" dy=".3em">${text}</text></svg>`;
-    return 'data:image/svg+xml,' + encodeURIComponent(svg);
-}
-
-function normalizeImage(img) {
-    if (!img) return placeholderSVG('Brak zdjęcia');
-    // already data URI
-    if (/^data:image\//.test(img)) return img;
-    // absolute or protocol-relative URL
-    if (/^(https?:)?\/\//.test(img)) return img;
-    // simple filename or relative path (no stray quotes)
-    const cleaned = img.split(/['"\s]/)[0];
-    if (/\.(jpe?g|png|webp|svg)$/i.test(cleaned)) return cleaned;
-    // if contains encoded svg fragment
-    const idx = img.indexOf('%3Csvg');
-    if (idx !== -1) return 'data:image/svg+xml,' + img.slice(idx);
-    return placeholderSVG('Zdjęcie');
-}
-
 function loadListings() {
     const saved = localStorage.getItem('listings');
     listings = saved ? JSON.parse(saved) : [
@@ -36,8 +15,6 @@ function loadListings() {
         { id: 4, brand: 'Volkswagen', model: 'Golf', year: 2020, price: 75000, mileage: 85000, fuel: 'Benzyna', description: 'VW Golf - niezawodne auto do codziennego użytku. Stan techniczny dobry, opony letnie i zimowe.', contact: '+48 555 456 789', image: 'golf.jpg' },
         { id: 5, brand: 'Toyota', model: 'Corolla', year: 2019, price: 65000, mileage: 120000, fuel: 'Hybrid', description: 'Toyota Corolla - niezawodne auto japońskie. Oszczędne paliwo, serwis regularny, bez wypadków.', contact: '+48 555 567 890', image: 'toyota.webp' }
     ];
-    // normalize image fields to existing files or data-URI placeholders
-    listings = listings.map(l => ({ ...l, image: normalizeImage(l.image) }));
     displayHomeListings();
 }
 
