@@ -39,12 +39,29 @@ $(function () {
   });
 
   $('#zmien-naglowek').on('click', function () {
-    $('header h1').fadeOut(120, function () { $(this).text('Zmieniony nagłówek — prosty przykład').fadeIn(120); });
+    $('header h1').fadeOut(120, function () { $(this).text('Zmieniony nagłówek').fadeIn(120); });
   });
 
   $('#podswietl').on('click', function () {
     $listaAut.find('li').addClass('highlight');
     setTimeout(function () { $listaAut.find('li').removeClass('highlight'); }, 700);
+  });
+
+  $('#filtr').on('input', function () {
+    const q = $(this).val().trim().toLowerCase();
+    let found = 0;
+    $listaAut.find('li').each(function () {
+      const $li = $(this);
+      const txt = $li.find('.nazwa-auta').text().toLowerCase();
+      const match = txt.indexOf(q) !== -1;
+      $li.toggle(match || q === '');
+      $li.toggleClass('match', match && q !== '');
+      if (match) found++;
+    });
+    $('.wynik-brak').remove();
+    if (q !== '' && found === 0) {
+      $listaAut.after('<div class="wynik-brak">Brak dopasowań</div>');
+    }
   });
 
   $listaAut.on('click', 'li', function () {

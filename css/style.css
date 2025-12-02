@@ -27,6 +27,18 @@ main {
 #controls {
     margin: 12px 0;
 }
+#filtr{
+    padding:8px 10px;
+    width:48%;
+    max-width:320px;
+    margin-right:10px;
+    border:1px solid #ccc;
+    border-radius:4px;
+}
+
+.wynik-brak{color:#a00;font-style:italic;margin-top:8px}
+
+.match{background:#fffbcc}
 
 button {
     margin-right: 8px;
